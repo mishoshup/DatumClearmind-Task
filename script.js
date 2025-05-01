@@ -1,3 +1,5 @@
+/* global bootstrap */
+
 class TaskManager {
   constructor() {
     this.tasks = [];
@@ -19,6 +21,7 @@ class TaskManager {
     this.fetchTasks();
   }
 
+  // Method for loading task from JSON
   async fetchTasks() {
     try {
       this.showLoading(true);
@@ -111,16 +114,25 @@ class TaskManager {
       .join("");
   }
 
+  // Function for showing task details
   showTaskDetails(taskId) {
     const task = this.tasks.find((t) => t.id === taskId);
     if (task) {
-      alert(`
-                Task Details:
-                ID: ${task.id}
-                Title: ${task.title}
-                Completed: ${task.completed ? "Yes" : "No"}
-                User ID: ${task.userId}
-            `);
+      const modalBody = document.getElementById("taskDetailsBody");
+      modalBody.innerHTML = `
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><strong>ID:</strong> ${task.id}</li>
+          <li class="list-group-item"><strong>Title:</strong> ${task.title}</li>
+          <li class="list-group-item"><strong>Completed:</strong> ${task.completed ? "Yes" : "No"}</li>
+          <li class="list-group-item"><strong>User ID:</strong> ${task.userId}</li>
+        </ul>
+      `;
+
+      // Show Bootstrap modal using JavaScript API
+      const modal = new bootstrap.Modal(
+        document.getElementById("taskDetailsModal"),
+      );
+      modal.show();
     }
   }
 }

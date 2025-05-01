@@ -1,9 +1,0 @@
-/* styles.css */
-.completed {
-  text-decoration: line-through;
-  opacity: 0.7;
-}
-
-.task-item {
-  transition: all 0.3s ease;
-}
