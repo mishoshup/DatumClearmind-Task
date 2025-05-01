@@ -40,11 +40,13 @@ class TaskManager {
                 </div>
             `;
     } finally {
+      // Ensure loading state is cleared regardless of success or failure
       this.showLoading(false);
     }
   }
 
   showLoading(isLoading) {
+    // Toggle visibility classes based on loading state
     this.loadingSpinner.classList.toggle("d-none", !isLoading);
     this.taskList.classList.toggle("d-none", isLoading);
   }
@@ -54,30 +56,32 @@ class TaskManager {
     this.renderTasks();
   }
 
+  // Changed simulateUpdateTask to async to handle actual API request
   async simulateUpdateTask(taskId, completed) {
     const task = this.tasks.find((t) => t.id === taskId);
     if (task) {
+      const updateTaskAPI = `https://jsonplaceholder.typicode.com/todos/${taskId}`;
+      const requestDetails = {
+        method: "PATCH",
+        body: JSON.stringify({
+          completed: completed, // Only send the changed property
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      console.log("Simulated API Update:", updateTaskAPI, requestDetails);
+
+      // Update local state and UI immediately before awaiting API call
+      task.completed = completed;
+      this.renderTasks();
+
       try {
-        // Simulate PUT request (replace with actual API call if needed)
-        const response = await fetch(
-          `https://jsonplaceholder.typicode.com/todos/${taskId}`,
-          {
-            method: "PUT",
-            body: JSON.stringify({
-              ...task,
-              completed: completed,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          },
-        );
-
+        // Attempt to update the task via API call using PATCH
+        const response = await fetch(updateTaskAPI, requestDetails);
         if (!response.ok) throw new Error("Failed to update task");
-
-        // Update local data after successful PUT request
-        task.completed = completed;
-        this.renderTasks();
+        // Note: No need to update state again since JSONPlaceholder doesn't persist changes
       } catch (error) {
         console.error("Error updating task:", error);
       }
@@ -85,8 +89,10 @@ class TaskManager {
   }
 
   renderTasks() {
+    // Create a copy of tasks array to avoid modifying original data
     let filteredTasks = [...this.tasks];
 
+    // Filter tasks based on current filter selection
     switch (this.filter) {
       case "completed":
         filteredTasks = filteredTasks.filter((task) => task.completed);
@@ -96,6 +102,7 @@ class TaskManager {
         break;
     }
 
+    // Generate HTML for each task and join into a single string
     this.taskList.innerHTML = filteredTasks
       .map(
         (task) => `
@@ -128,6 +135,7 @@ class TaskManager {
     const task = this.tasks.find((t) => t.id === taskId);
     if (task) {
       const modalBody = document.getElementById("taskDetailsBody");
+      // Populate modal with task details in a list format
       modalBody.innerHTML = `
         <ul class="list-group list-group-flush">
           <li class="list-group-item"><strong>ID:</strong> ${task.id}</li>
@@ -148,4 +156,5 @@ class TaskManager {
 
 // Initialize Task Manager
 const taskManager = new TaskManager();
+// Expose taskManager globally for inline event handlers
 window.taskManager = taskManager;
