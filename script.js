@@ -54,24 +54,33 @@ class TaskManager {
     this.renderTasks();
   }
 
-  simulateUpdateTask(taskId, completed) {
+  async simulateUpdateTask(taskId, completed) {
     const task = this.tasks.find((t) => t.id === taskId);
     if (task) {
-      // Simulate PUT request
-      const requestDetails = {
-        method: "PUT",
-        url: `https://jsonplaceholder.typicode.com/todos/${taskId}`,
-        body: JSON.stringify({
-          ...task,
-          completed: completed,
-        }),
-      };
+      try {
+        // Simulate PUT request (replace with actual API call if needed)
+        const response = await fetch(
+          `https://jsonplaceholder.typicode.com/todos/${taskId}`,
+          {
+            method: "PUT",
+            body: JSON.stringify({
+              ...task,
+              completed: completed,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        );
 
-      console.log("Simulated API Update:", requestDetails);
+        if (!response.ok) throw new Error("Failed to update task");
 
-      // Update local data
-      task.completed = completed;
-      this.renderTasks();
+        // Update local data after successful PUT request
+        task.completed = completed;
+        this.renderTasks();
+      } catch (error) {
+        console.error("Error updating task:", error);
+      }
     }
   }
 
