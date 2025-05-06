@@ -7,3 +7,7 @@
 .task-item {
   transition: all 0.3s ease;
 }
+
+.task-item:hover {
+  background-color: #f0f0f0;
+}

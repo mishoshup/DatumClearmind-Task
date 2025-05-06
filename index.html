@@ -5,54 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>DatumClearmind | Task Manager</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+
+    <!-- Bootstrap 5 CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
       crossorigin="anonymous"
     />
+
+    <!-- Optional: Custom styles -->
     <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
-    <div class="container mt-5">
-      <h1 class="mb-4">Task Manager</h1>
+    <main class="container py-5">
+      <!-- Page Title -->
+      <header class="mb-4">
+        <h1 class="text-black">Task Manager</h1>
+      </header>
 
-      <!-- Dropdown select to filter task -->
-      <div class="mb-3">
+      <!-- Filter & Refresh Controls -->
+      <section class="d-flex align-items-center gap-2 mb-4">
+        <!-- Dropdown for filtering tasks by status -->
         <select
           id="filterSelect"
-          class="form-select w-auto d-inline-block me-2"
+          class="form-select w-auto"
+          aria-label="Filter task list"
         >
           <option value="all">All Tasks</option>
           <option value="completed">Completed Tasks</option>
           <option value="incomplete">Incomplete Tasks</option>
         </select>
-        <!-- Button to refresh filtered task DOM state -->
-        <button id="refreshBtn" class="btn btn-primary">Refresh</button>
-      </div>
 
-      <!-- Loading spinner to fallback when waiting for task list to complete loading -->
-      <div id="loadingSpinner" class="text-center d-none">
-        <div class="spinner-border" role="status">
+        <!-- Refresh button to reload task list -->
+        <button id="refreshBtn" class="btn btn-outline-primary">Refresh</button>
+      </section>
+
+      <!-- Loading Indicator (shown while fetching tasks) -->
+      <div id="loadingSpinner" class="d-flex justify-content-center">
+        <div class="spinner-border text-primary m-5" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
 
-      <!-- Task list dynamically loaded from JSONPlaceholder API -->
-      <div id="taskList" class="list-group"></div>
-    </div>
+      <!-- Dynamic Task List -->
+      <section id="taskList" class="list-group shadow-sm"></section>
+    </main>
 
-    <!-- Task Details Modal -->
-    <div
-      class="modal fade"
-      id="taskDetailsModal"
-      tabindex="-1"
-      aria-labelledby="taskDetailsLabel"
-      aria-hidden="true"
-    >
+    <!-- Bootstrap Modal for Task Details -->
+    <div class="modal fade" id="taskDetailsModal" tabindex="-1">
       <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content rounded-3 shadow">
           <div class="modal-header">
             <h5 class="modal-title" id="taskDetailsLabel">Task Details</h5>
             <button
@@ -62,9 +66,10 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body" id="taskDetailsBody">
-            <!-- Task details will be injected here -->
-          </div>
+
+          <!-- Modal body populated dynamically via JS -->
+          <div class="modal-body" id="taskDetailsBody"></div>
+
           <div class="modal-footer">
             <button
               type="button"
@@ -78,11 +83,14 @@
       </div>
     </div>
 
+    <!-- Bootstrap JS Bundle -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
       crossorigin="anonymous"
     ></script>
+
+    <!-- Your custom logic -->
     <script src="script.js"></script>
   </body>
 </html>
